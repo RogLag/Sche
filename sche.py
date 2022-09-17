@@ -70,4 +70,4 @@ async def error_handler(interaction: discord.Interaction, error: Exception):
 
 ##Run Bot
 
-bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GbPWMW.JEq7sHkId4KolE7kZnFNU59dOTsWAJyQvDUC1U")
+bot.run("TOKEN")
