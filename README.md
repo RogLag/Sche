@@ -1,0 +1,2 @@
+# Sche
+Bot for timetable
