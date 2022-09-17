@@ -4,6 +4,7 @@ from discord.ext import commands
 from datetime import datetime
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+version = "0.0.1"
 
 ##Connection Bot
 
@@ -19,7 +20,7 @@ class abot(discord.Client):
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         channel_connected = bot.get_channel(972811106580058132)
-        embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: 0.1.1,\n{bot.user.name} by Rog#8698.", color=0x33DAFF)
+        embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0x33DAFF)
         await channel_connected.send(embed=embed)
         print(f"{bot.user.name} is ready.")  
     
