@@ -35,4 +35,4 @@ async def self(interaction: discord.Interaction):
     
 ##Run Bot
 
-bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GbPWMW.JEq7sHkId4KolE7kZnFNU59dOTsWAJyQvDUC1U")
+bot.run("TOKEN")
