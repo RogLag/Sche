@@ -1,7 +1,9 @@
 from optparse import Option
 import discord
 from discord import app_commands
+from discord.app_commands import Choice
 import datetime
+import configparser
 
 version = "0.0.1"
 
@@ -28,14 +30,34 @@ tree = app_commands.CommandTree(bot)
 
 ##Commands
 
-@tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700),discord.Object(id=1018837382633627658)])
+@tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700)])
 @app_commands.checks.has_permissions(manage_guild=True)
-async def self(interaction: discord.Interaction, date: str):
-    try:
-        date = datetime.datetime.strptime(date, format)
-        await interaction.response.send_message(file=discord.File('image.jpg'), ephemeral=True)
-    except ValueError:
-        await interaction.response.send_message("Wrong date", ephemeral=True)
+@app_commands.choices(month = [
+    Choice(name='1', value='1'),
+    Choice(name='2', value='2'),
+    Choice(name='3', value='3'),
+    Choice(name='4', value='4'),
+    Choice(name='5', value='5'),
+    Choice(name='6', value='6'),
+    Choice(name='7', value='7'),
+    Choice(name='8', value='8'),
+    Choice(name='9', value='9'),
+    Choice(name='10', value='10'),
+    Choice(name='11', value='11'),
+    Choice(name='12', value='12'),
+])
+    
+async def self(interaction: discord.Interaction, day: str, month: str):
+    if int(day) < 1 or int(day) > 31:
+        await interaction.response.send_message("The day is not valid.", ephemeral=True)
+    else:
+        try:
+            date = ""
+            date += f"2022-{month}-{day}"
+            date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+            await interaction.response.send_message(file=discord.File('image.jpg'), ephemeral=True)
+        except ValueError:
+            await interaction.response.send_message("Wrong date", ephemeral=True)
    
     
 ##Error
@@ -60,4 +82,4 @@ async def error_handler(interaction: discord.Interaction, error: Exception):
 
 ##Run Bot
 
-bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.G_N71s.NOw6N5SjU7KrDzKpWqSfv8Hgoie4Acxsj8g1Gg")
+bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GfyNkM.pAc7Pn63lSeQA4ts0f6VnNEyFbyD1RGElJPuuc")
