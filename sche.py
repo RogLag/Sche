@@ -2,12 +2,11 @@ import discord
 from discord import app_commands
 from discord.app_commands import Choice
 import datetime
-import Token
 
 ##Options
 
 version = "0.0.1"
-token = "TOKEN"
+token = "Token"
 
 ##Connection Bot
 
