@@ -7,7 +7,7 @@ import Token
 ##Options
 
 version = "0.0.1"
-token = Token.token()
+token = "TOKEN"
 
 ##Connection Bot
 
