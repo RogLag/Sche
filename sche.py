@@ -60,10 +60,8 @@ async def self(interaction: discord.Interaction, day: str, month: str):
             await interaction.response.send_message(file=discord.File('image.jpg'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
-   
-@tree.command(name='set_timetable', description="Set the timetable for all days.", guilds=[discord.Object(id=972500345815195700)])
-@app_commands.checks.has_permissions(manage_guild=True)
-    
+
+
 ##Error
 
 @tree.error
