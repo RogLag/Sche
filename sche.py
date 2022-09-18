@@ -1,9 +1,8 @@
+from optparse import Option
 import discord
 from discord import app_commands
-from discord.ext import commands
-from datetime import datetime
+import datetime
 
-bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 version = "0.0.1"
 
 ##Connection Bot
@@ -15,9 +14,9 @@ class abot(discord.Client):
         self.synced = False
     
     async def on_ready(self):
-        await tree.sync(guild=discord.Object(id=1018837382633627658))
+        await tree.sync(guild=discord.Object(id=972500345815195700))
         self.synced = True
-        now = datetime.now()
+        now = datetime.datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         channel_connected = bot.get_channel(972811106580058132)
         embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0x33DAFF)
@@ -29,46 +28,36 @@ tree = app_commands.CommandTree(bot)
 
 ##Commands
 
-@tree.command(name='timetable.set', guild=discord.Object(id=1018837382633627658))
-@app_commands.user_has_permissions(administrator=True)
-async def self(interaction: discord.Interaction):
-    await interaction.response.send_message('test')
+@tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700),discord.Object(id=1018837382633627658)])
+@app_commands.checks.has_permissions(manage_guild=True)
+async def self(interaction: discord.Interaction, date: str):
+    try:
+        date = datetime.datetime.strptime(date, format)
+        await interaction.response.send_message(file=discord.File('image.jpg'), ephemeral=True)
+    except ValueError:
+        await interaction.response.send_message("Wrong date", ephemeral=True)
+   
     
 ##Error
 
 @tree.error
 async def error_handler(interaction: discord.Interaction, error: Exception):
     if isinstance(error, app_commands.CommandNotFound):
-        await interaction.response.send_message(f"Command not found: {error.command_name}")
+        await interaction.response.send_message(f"Command not found.", ephemeral=True)
     elif isinstance(error, app_commands.MissingPermissions):
-        await interaction.response.send_message(f"Missing permissions: {error.missing_permissions}")
-    elif isinstance(error, app_commands.MissingRequiredArgument):
-        await interaction.response.send_message(f"Missing required argument: {error.argument_name}")
-    elif isinstance(error, app_commands.TooManyArguments):
-        await interaction.response.send_message(f"Too many arguments: {error.argument_name}")
-    elif isinstance(error, app_commands.ArgumentConversionFailure):
-        await interaction.response.send_message(f"Argument conversion failure: {error.argument_name}")
-    elif isinstance(error, app_commands.ArgumentParsingFailure):
-        await interaction.response.send_message(f"Argument parsing failure: {error.argument_name}")
+        await interaction.response.send_message(f"Missing permissions: {error.missing_permissions}", ephemeral=True)
     elif isinstance(error, app_commands.CommandInvokeError):
-        await interaction.response.send_message(f"Command invoke error: {error.original}")
-    elif isinstance(error, app_commands.CommandError):
-        await interaction.response.send_message(f"Command error: {error.original}")
-    elif isinstance(error, app_commands.CommandRegistrationError):
-        await interaction.response.send_message(f"Command registration error: {error.original}")
-    elif isinstance(error, app_commands.CommandTreeError):
-        await interaction.response.send_message(f"Command tree error: {error.original}")
-    elif isinstance(error, app_commands.CommandTreeRegistrationError):
-        await interaction.response.send_message(f"Command tree registration error: {error.original}")
-    elif isinstance(error, app_commands.CommandTreeUnregistrationError):
-        await interaction.response.send_message(f"Command tree unregistration error: {error.original}")
-    elif isinstance(error, app_commands.CommandUnregistrationError):
-        await interaction.response.send_message(f"Command unregistration error: {error.original}")
+        channel_connected = bot.get_channel(1020707241243967538)
+        embed=discord.Embed(title=f"{bot.user.name} get an error !", description=f"Command invoke error for __/{interaction.command.name}__:,\n{error.original},\n\nin {interaction.guild.name}", color=0xED4245)
+        await channel_connected.send(embed=embed)
+        await interaction.response.send_message(f"Command invoke error: {error.original}", ephemeral=True)
     elif isinstance(error, app_commands.BotMissingPermissions):
-        await interaction.response.send_message(f"Bot missing permissions: {error.missing_permissions}")
+        await interaction.response.send_message(f"Bot missing permissions: {error.missing_permissions}", ephemeral=True)
+    elif isinstance(error, app_commands.CommandOnCooldown):
+        await interaction.response.send_message(f"Command on cooldown: {error.retry_after}", ephemeral=True)
     else:
         await interaction.response.send_message(f"Error: {error}")
 
 ##Run Bot
 
-bot.run("TOKEN")
+bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.G_N71s.NOw6N5SjU7KrDzKpWqSfv8Hgoie4Acxsj8g1Gg")
