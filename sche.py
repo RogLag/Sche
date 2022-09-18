@@ -1,11 +1,13 @@
-from optparse import Option
 import discord
 from discord import app_commands
 from discord.app_commands import Choice
 import datetime
-import configparser
+import Token
+
+##Options
 
 version = "0.0.1"
+token = Token.token()
 
 ##Connection Bot
 
@@ -82,4 +84,4 @@ async def error_handler(interaction: discord.Interaction, error: Exception):
 
 ##Run Bot
 
-bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GfyNkM.pAc7Pn63lSeQA4ts0f6VnNEyFbyD1RGElJPuuc")
+bot.run(f"{token}")
