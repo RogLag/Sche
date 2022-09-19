@@ -34,18 +34,18 @@ tree = app_commands.CommandTree(bot)
 @tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700)])
 @app_commands.checks.has_permissions(write_message=True)
 @app_commands.choices(month = [
-    Choice(name='1', value='1'),
-    Choice(name='2', value='2'),
-    Choice(name='3', value='3'),
-    Choice(name='4', value='4'),
-    Choice(name='5', value='5'),
-    Choice(name='6', value='6'),
-    Choice(name='7', value='7'),
-    Choice(name='8', value='8'),
-    Choice(name='9', value='9'),
-    Choice(name='10', value='10'),
-    Choice(name='11', value='11'),
-    Choice(name='12', value='12'),
+    Choice(name='Janvier', value='1'),
+    Choice(name='Fevrier', value='2'),
+    Choice(name='Mars', value='3'),
+    Choice(name='Avril', value='4'),
+    Choice(name='Mai', value='5'),
+    Choice(name='Juin', value='6'),
+    Choice(name='Juillet', value='7'),
+    Choice(name='Août', value='8'),
+    Choice(name='Septembre', value='9'),
+    Choice(name='Octobre', value='10'),
+    Choice(name='Novembre', value='11'),
+    Choice(name='Décembre', value='12'),
 ])
     
 async def self(interaction: discord.Interaction, day: str, month: str):
