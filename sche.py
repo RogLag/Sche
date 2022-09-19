@@ -32,7 +32,7 @@ tree = app_commands.CommandTree(bot)
 ##Commands
 
 @tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700)])
-@app_commands.checks.has_permissions(write_message=True)
+@app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.choices(month = [
     Choice(name='Janvier', value='1'),
     Choice(name='Fevrier', value='2'),
