@@ -49,12 +49,12 @@ tree = app_commands.CommandTree(bot)
     Choice(name='Décembre', value='12'),
 ])
     
-async def self(interaction: discord.Interaction, day: str, month: str, year: str):
+async def self(interaction: discord.Interaction, day: str, month: str, year: str, englishGroup: str, siGroup: str):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
         try:
-            await ics_reader.getTimetable(year, month, day)
+            await ics_reader.getTimetable(year, month, day, englishGroup, siGroup)
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
