@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.app_commands import Choice
 import datetime
+import ics_reader
 
 ##Options
 
@@ -48,15 +49,13 @@ tree = app_commands.CommandTree(bot)
     Choice(name='Décembre', value='12'),
 ])
     
-async def self(interaction: discord.Interaction, day: str, month: str):
+async def self(interaction: discord.Interaction, day: str, month: str, year: str):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
         try:
-            date = ""
-            date += f"2022-{month}-{day}"
-            date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-            await interaction.response.send_message(file=discord.File('image.jpg'), ephemeral=True)
+            await ics_reader.getTimetable(year, month, day)
+            await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
 
