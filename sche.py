@@ -29,11 +29,12 @@ class abot(discord.Client):
     
 bot = abot()
 tree = app_commands.CommandTree(bot)
+tree
 
 ##Commands
 
 @tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700)])
-@app_commands.checks.has_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(send_messages=True)
 @app_commands.choices(month = [
     Choice(name='Janvier', value='1'),
     Choice(name='Fevrier', value='2'),
@@ -49,7 +50,7 @@ tree = app_commands.CommandTree(bot)
     Choice(name='Décembre', value='12'),
 ])
     
-async def self(interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
+async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
@@ -58,6 +59,14 @@ async def self(interaction: discord.Interaction, day: str, month: str, year: str
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
+
+@tree.command(name="setup", description="Setup the bot for timetable of the day, every day.", guilds=[discord.Object(id=972500345815195700)])
+@app_commands.checks.has_permissions(manage_guild=True)
+
+async def setup(interaction: discord.Interaction):
+    await interaction.response.send_message("Setup the bot for timetable of the day, every day.", ephemeral=True)
+    dateofday = datetime.datetime.now()
+    print(dateofday)
 
 
 ##Error
