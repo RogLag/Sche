@@ -6,15 +6,25 @@ import requests
 import time
 
 
+def get_wrapped_text(text: str, font: ImageFont.ImageFont, line_length: int):
+        lines = ['']
+        for word in text.split():
+            line = f'{lines[-1]} {word}'.strip()
+            if font.getlength(line) <= line_length:
+                lines[-1] = line
+            else:
+                lines.append(word)
+        return '\n'.join(lines)
+
 def updateTimetable():
     calendarFile = open('./ADECal.ics', 'w', encoding='utf-8', newline='\n')
 
-    res = requests.get('http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=d10d2eee7adfcc1a372dc75a5b67ef2228aab545587a28d07e896f720f6422bca56b9d48cf60d89aad5fb9b261bdf14bc23fc73e40a62f8cea315d7ede6c0137,1')
+    res = requests.get('http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=ff69e94cc5e79fb161a9f2c47b250b59b4656713ae4720315366f1bfdaa16957a56b9d48cf60d89aad5fb9b261bdf14bc23fc73e40a62f8cea315d7ede6c0137,1')
     for line in res.text:
         calendarFile.writelines(line)
     calendarFile.close()
 
-def getTimetable(year, month, day, englishGroup, siGroup):
+def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
     cal = Calendar.from_ical(open('ADECal.ics', 'rb').read())
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
@@ -35,9 +45,6 @@ def getTimetable(year, month, day, englishGroup, siGroup):
                         continue
 
 
-                    print("Found it!")
-                    print(component.get('summary'))
-
                     draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
 
                     if(len(component.get('summary')) > 60):
@@ -55,6 +62,9 @@ def getTimetable(year, month, day, englishGroup, siGroup):
                     draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+2)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+2)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
                 else:
+                    if('9'+classGroup.upper() not in component.get('summary') and 'Gr9 ' not in component.get('summary')):
+                        continue
+
                     color = (100,100,100,255)
                     if('Raisonnement' in component.get('summary')):
                         color = (50,50,255,255)

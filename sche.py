@@ -7,7 +7,7 @@ import ics_reader
 ##Options
 
 version = "0.0.1"
-token = "Token"
+token = "MTAyMDA0NzI1OTE1NDUzNDU2Mg.G4B6SZ.RW__sNdde7vuGyR4e_J6HCtvecHi5fPpwWMiuU"
 
 ##Connection Bot
 
@@ -35,26 +35,26 @@ tree = app_commands.CommandTree(bot)
 @tree.command(name='timetable', description="Show the timetable of the day.", guilds=[discord.Object(id=972500345815195700)])
 @app_commands.checks.has_permissions(manage_guild=True)
 @app_commands.choices(month = [
-    Choice(name='Janvier', value='1'),
-    Choice(name='Fevrier', value='2'),
-    Choice(name='Mars', value='3'),
-    Choice(name='Avril', value='4'),
-    Choice(name='Mai', value='5'),
-    Choice(name='Juin', value='6'),
-    Choice(name='Juillet', value='7'),
-    Choice(name='Août', value='8'),
-    Choice(name='Septembre', value='9'),
-    Choice(name='Octobre', value='10'),
-    Choice(name='Novembre', value='11'),
-    Choice(name='Décembre', value='12'),
+    Choice(name='Janvier', value=1),
+    Choice(name='Fevrier', value=2),
+    Choice(name='Mars', value=3),
+    Choice(name='Avril', value=4),
+    Choice(name='Mai', value=5),
+    Choice(name='Juin', value=6),
+    Choice(name='Juillet', value=7),
+    Choice(name='Août', value=8),
+    Choice(name='Septembre', value=9),
+    Choice(name='Octobre', value=10),
+    Choice(name='Novembre', value=11),
+    Choice(name='Décembre', value=12),
 ])
     
-async def self(interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
+async def self(interaction: discord.Interaction, day: int, month: int, year: int, classgroup: str, englishgroup: int, sigroup: int):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
         try:
-            await ics_reader.getTimetable(year, month, day, englishgroup, sigroup)
+            ics_reader.getTimetable(year, month, day, classgroup, englishgroup, sigroup)
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
