@@ -3,12 +3,11 @@ from discord import app_commands
 from discord.app_commands import Choice
 import datetime
 import ics_reader
-import token
 
 ##Options
 
 version = "0.0.1"
-token = token.token()
+token = 'Token'
 
 ##Connection Bot
 

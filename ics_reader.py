@@ -29,7 +29,7 @@ def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
     draw = ImageDraw.Draw(image)
-    fnt = ImageFont.truetype("arial.ttf", 20)
+    fnt = ImageFont.truetype("arial.ttf", 30)
 
     for component in cal.walk():
         if component.name == "VEVENT":
@@ -47,13 +47,13 @@ def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
 
                     draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
 
-                    if(len(component.get('summary')) > 60):
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:60]+'...',font=fnt,fill=(255,255,255,255))
+                    if(len(component.get('summary')) > 35):
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
                         draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
                     
-                    if(len(component.get('location')) > 60):
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:60]+'...',font=fnt,fill=(255,255,255,255))
+                    if(len(component.get('location')) > 35):
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
                         draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
                     
@@ -77,18 +77,16 @@ def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
                     elif('Informatique'):
                         color = (0,128,64,255)
                     
-                    print("Found it!")
-                    print(component.get('summary'))
 
                     draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
 
-                    if(len(component.get('summary')) > 60):
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:60]+'...',font=fnt,fill=(255,255,255,255))
+                    if(len(component.get('summary')) > 35):
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
                         draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
                     
-                    if(len(component.get('location')) > 60):
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:60]+'...',font=fnt,fill=(255,255,255,255))
+                    if(len(component.get('location')) > 35):
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
                         draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
                     
