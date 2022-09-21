@@ -22,5 +22,5 @@ class setup(commands.Cog):
             else:
                 time.sleep(60*60*(19-dateofday.hour)+60*(60-dateofday.minute)+60-dateofday.second)
 
-def setup(bot):
-    bot.add_cog(setup(bot), guilds=[discord.Object(id=972500345815195700)])
+    async def setup(bot):
+        await bot.add_cog(setup(bot), guilds=[discord.Object(id=972500345815195700)])

@@ -22,10 +22,11 @@ async def on_ready():
 async def load_cogs():
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')
+            await bot.load_extension(f'cogs.{filename[:-3]}')
 
 async def main():
-    await load_cogs()
-    await bot.start("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GPGJNa.yeqbFGCNogTDEYM-X2bOdCj7VStCLxcjeH3F4Q")
+    async with bot:
+        await load_cogs()
+        await bot.run("MTAyMDA0NzI1OTE1NDUzNDU2Mg.GQM00h._Z9jHzhh2ZKatRuJ23njl27qfXoXoBdQCynOSE")
 
 asyncio.run(main())
