@@ -24,7 +24,7 @@ def updateTimetable():
         calendarFile.writelines(line)
     calendarFile.close()
 
-def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
+def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
     cal = Calendar.from_ical(open('ADECal.ics', 'rb').read())
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
@@ -35,6 +35,10 @@ def getTimetable(year, month, day, classGroup, englishGroup, siGroup):
         if component.name == "VEVENT":
             if(datetime.datetime.date(component.get('dtstart').dt) >= datetime.datetime.date(today) and datetime.datetime.date(component.get('dtstart').dt) <= datetime.datetime.date(today)):
                 if(datetime.datetime.weekday(component.get('dtstart').dt) == 0):
+                    if(classGroup == '0'):
+                        draw.text((225, 100), "Jour non-supporté", font=fnt, fill=(255,255,255,255))
+                        continue
+
                     color = (100,100,100,255)
                     if('Anglais' in component.get('summary')):
                         color = (100,100,255,255)
