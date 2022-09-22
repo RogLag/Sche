@@ -25,14 +25,29 @@ async def on_ready():
 
 @bot.tree.command(name="setup", description="Setup the bot for timetable of the day, every day.")
 @app_commands.checks.has_permissions(manage_guild=True)
-async def setup(interaction: discord.Interaction):
+@app_commands.choices(group=[
+    Choice(name="A", value="A"),
+    Choice(name="B", value="B")
+])
+async def setup(interaction: discord.Interaction, group: str):
     dateofday = datetime.datetime.now()
     await interaction.response.send_message("Setup the bot for timetable of the day, every day.", ephemeral=True)
+    if dateofday.weekday() == 0:
+        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+    else:
+        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
     await interaction.channel.send(file=discord.File('./calendar.png'))
     while True:
         dateofday = datetime.datetime.now()
-        if dateofday.hour == 19 and dateofday.minute >= 0 and dateofday.minute <= 5:
-            await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
+        """
+        verification que le jour est un lundi
+        """
+        if dateofday.hour == 00 and dateofday.minute >= 1 and dateofday.minute <= 5:
+            if dateofday.weekday() == 0:
+                ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+            else:
+                ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
+            await interaction.response.send_message(file=discord.File('./calendar.png'))
             time.sleep(60*60*24)
         else:
             time.sleep(60*60*(19-dateofday.hour)+60*(60-dateofday.minute)+60-dateofday.second)
@@ -52,14 +67,28 @@ async def setup(interaction: discord.Interaction):
         Choice(name='Novembre', value='11'),
         Choice(name='Décembre', value='12'),
     ])
-async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, classgroup: str, englishgroup: str, sigroup: str):
-    if int(day) < 1 or int(day) > 31:
-        await interaction.response.send_message("The day is not valid.", ephemeral=True)
+@app_commands.choices(group=[
+    Choice(name="A", value="A"),
+    Choice(name="B", value="B")
+])
+async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, group: str, englishgroup: str, sigroup: str):
+    if int(month) == 2:
+        if int(day) > 28:
+            await interaction.response.send_message("La date entrée n'est pas valide.", ephemeral=True)
+            return
+    elif int(month) == 4 or int(month) == 6 or int(month) == 9 or int(month) == 11:
+        if int(day) > 30:
+            await interaction.response.send_message("La date entrée n'est pas valide.", ephemeral=True)
+            return
+    elif int(month) == 1 or int(month) == 3 or int(month) == 5 or int(month) == 7 or int(month) == 8 or int(month) == 10 or int(month) == 12:
+        if int(day) > 31:
+            await interaction.response.send_message("La date entrée n'est pas valide.", ephemeral=True)
+            return
     else:
         try:
-            ics_reader.getTimetable(year, month, day, classgroup, englishgroup, sigroup)
+            ics_reader.getTimetable(year, month, day, group, englishgroup, sigroup)
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
 
-bot.run('Token')
+bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GbXGjC.3BYj0Bji-p0XWVoEEOxCi2WaqCCUHdDZcVQPEA')
