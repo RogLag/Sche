@@ -62,4 +62,4 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
 
-bot.run('token')
+bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GD7YId.sRdhyyiA9hTT_2G2t55SPP9ld_5Tba6Cu56If8')
