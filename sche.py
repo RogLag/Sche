@@ -28,7 +28,7 @@ async def on_ready():
 async def setup(interaction: discord.Interaction):
     dateofday = datetime.datetime.now()
     await interaction.response.send_message("Setup the bot for timetable of the day, every day.", ephemeral=True)
-    await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
+    await interaction.channel.send(file=discord.File('./calendar.png'))
     while True:
         dateofday = datetime.datetime.now()
         if dateofday.hour == 19 and dateofday.minute >= 0 and dateofday.minute <= 5:
@@ -52,14 +52,14 @@ async def setup(interaction: discord.Interaction):
         Choice(name='Novembre', value='11'),
         Choice(name='Décembre', value='12'),
     ])
-async def timetable(self, interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
+async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
         try:
-            await ics_reader.getTimetable(year, month, day, englishgroup, sigroup)
+            ics_reader.getTimetable(year, month, day, englishgroup, sigroup)
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
 
-bot.run('token')
+bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.Gbbw4f.mYi-YmX0BsRxKyUJ6mfgO2YjZToduToXn0zkk8')
