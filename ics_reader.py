@@ -24,7 +24,7 @@ def getTimetable(year, month, day, englishGroup, siGroup):
     for component in cal.walk():
         if component.name == "VEVENT":
             if(datetime.datetime.date(component.get('dtstart').dt) >= datetime.datetime.date(today) and datetime.datetime.date(component.get('dtstart').dt) <= datetime.datetime.date(today)):
-                if(datetime.datetime.weekday(component.get('dtstart').dt) == 0):
+                if(datetime.datetime.weekday(component.get('dtstart').dt) == '0'):
                     color = (100,100,100,255)
                     if('Anglais' in component.get('summary')):
                         color = (100,100,255,255)
