@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-version = "0.0.1"
+version = "1.0.0"
 
 @bot.event
 async def on_ready():
@@ -98,4 +98,4 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
     
     
     
-bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GT06sA.sKPN-GX59xa5c4AX3ocKtPSJsSDTB18LgHHbDg')
+bot.run('Token')
