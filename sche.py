@@ -52,14 +52,14 @@ async def setup(interaction: discord.Interaction):
         Choice(name='Novembre', value='11'),
         Choice(name='Décembre', value='12'),
     ])
-async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, englishgroup: str, sigroup: str):
+async def timetable(interaction: discord.Interaction, day: str, month: str, year: str, classgroup: str, englishgroup: str, sigroup: str):
     if int(day) < 1 or int(day) > 31:
         await interaction.response.send_message("The day is not valid.", ephemeral=True)
     else:
         try:
-            ics_reader.getTimetable(year, month, day, englishgroup, sigroup)
+            ics_reader.getTimetable(year, month, day, classgroup, englishgroup, sigroup)
             await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
         except ValueError:
             await interaction.response.send_message("Wrong date", ephemeral=True)
 
-bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GD7YId.sRdhyyiA9hTT_2G2t55SPP9ld_5Tba6Cu56If8')
+bot.run('Token')
