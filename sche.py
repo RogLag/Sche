@@ -37,6 +37,7 @@ async def setup(interaction: discord.Interaction, group: str):
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
     else:
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
+    await interaction.channel.send(f"Emploi du temps du jour {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
     await interaction.channel.send(file=discord.File('./calendar.png'))
     print("ok1")
     while True:
@@ -44,11 +45,13 @@ async def setup(interaction: discord.Interaction, group: str):
         """
         verification que le jour est un lundi
         """
-        if dateofday.hour == 00 and dateofday.minute >= 5 and dateofday.minute <= 00:
+        if dateofday.hour == 00 and dateofday.minute >= 5 and dateofday.minute <= 10:
             if dateofday.weekday() == 0:
                 ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
             else:
                 ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
+            await interaction.channel.delete_messages(2)
+            await interaction.channel.send(f"Emploi du temps du jour {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
             await interaction.channel.send(file=discord.File('./calendar.png'))
             print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             await asyncio.sleep(60*60*24)
