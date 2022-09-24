@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-version = "1.0.0"
+version = "1.0.2"
 
 @bot.event
 async def on_ready():
@@ -37,27 +37,26 @@ async def setup(interaction: discord.Interaction, group: str):
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
     else:
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
-    await interaction.channel.send(f"Emploi du temps du jour {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+    await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
     await interaction.channel.send(file=discord.File('./calendar.png'))
-    print("ok1")
+    print(f"Aujourd'hui on est un {dateofday.weekday()}")
     while True:
         dateofday = datetime.datetime.now()
-        """
-        verification que le jour est un lundi
-        """
         if dateofday.hour == 00 and dateofday.minute >= 5 and dateofday.minute <= 10:
-            if dateofday.weekday() == 0:
-                ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
-            else:
-                ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
-            await interaction.channel.delete_messages(2)
-            await interaction.channel.send(f"Emploi du temps du jour {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
-            await interaction.channel.send(file=discord.File('./calendar.png'))
-            print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
+            if dateofday.weekday() != 5 and dateofday.weekday() != 6:
+                if dateofday.weekday() == 0:
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+                else:
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, f"{group}", "1", "1")
+                await interaction.channel.purge(limit=2)
+                await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+                await interaction.channel.send(file=discord.File('./calendar.png'))
+                print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             await asyncio.sleep(60*60*24)
         else:
-            print(f"Le premier message sera envoyé dans {60*60*(24-dateofday.hour)+60*(5-dateofday.minute)+00-dateofday.second} secondes.")
-            await asyncio.sleep(60*60*(24-dateofday.hour)+60*(5-dateofday.minute)+00-dateofday.second)
+            time_sleep = 60*60*(24-dateofday.hour)+60*(5-dateofday.minute)+00-dateofday.second
+            print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
+            await asyncio.sleep(time_sleep)
 
 @bot.tree.command(name="timetable", description="Send the timetable of the day.")
 @app_commands.choices(month = [
@@ -87,18 +86,17 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
         if int(day) > 30:
             await interaction.response.send_message("La date entrée n'est pas valide.", ephemeral=True)
             return
-    print("ok3")
     if int(month) == 1 or int(month) == 3 or int(month) == 5 or int(month) == 7 or int(month) == 8 or int(month) == 10 or int(month) == 12:
         if int(day) > 31:
             await interaction.response.send_message("La date entrée n'est pas valide.", ephemeral=True)
             return
     try:
         ics_reader.getTimetable(int(year), int(month), int(day), group, englishgroup, sigroup)
-        await interaction.response.send_message(file=discord.File('./calendar.png'), ephemeral=True)
+        await interaction.response.send_message(f"Emploi du temps du {day}/{month}/{year}, groupe {group}, anglais {englishgroup}, SI {sigroup} :",file=discord.File('./calendar.png'), ephemeral=True)
     except ValueError:
         await interaction.response.send_message("Wrong date", ephemeral=True)
     print(f"Message envoyée dans le channel {interaction.channel.name} à l'utilisateur {interaction.user.name} sur le serveur {interaction.guild.name} le {datetime.datetime.now()}")
     
     
     
-bot.run('Token')
+bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GBskVl.KhrFQaGnSQTiS4clk6fDb2lPh0TnyWpuqyH_F0')
