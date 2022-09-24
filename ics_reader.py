@@ -29,7 +29,7 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
     draw = ImageDraw.Draw(image)
-    fnt = ImageFont.truetype("arial.ttf", 30)
+    fnt = ImageFont.truetype("./ayar.ttf", 30, encoding="unic")
 
     for component in cal.walk():
         if component.name == "VEVENT":
