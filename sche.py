@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-version = "1.0.2"
+version = "1.2.0"
 
 @bot.event
 async def on_ready():
@@ -97,6 +97,54 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
         await interaction.response.send_message("Wrong date", ephemeral=True)
     print(f"Message envoyée dans le channel {interaction.channel.name} à l'utilisateur {interaction.user.name} sur le serveur {interaction.guild.name} le {datetime.datetime.now()}")
     
-    
-    
-bot.run('Token')
+
+"""
+Creation d'une commande slash pour la creation d'un message avec un reaction role qui fonctionne avec plusieurs boutons
+"""
+
+class RoleButton(discord.ui.Button):
+    def __init__(self, role: discord.Role, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.role = role
+        
+    async def callback(self, interaction: discord.Interaction):
+        if self.role in interaction.user.roles:
+            if self.role != discord.utils.get(interaction.guild.roles, name="groupe: A") and self.role != discord.utils.get(interaction.guild.roles, name="groupe: B"):
+                await interaction.user.remove_roles(self.role)
+        else:
+            if self.role == discord.utils.get(interaction.guild.roles, name="groupe: A"):
+                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="groupe: B"))
+            if self.role == discord.utils.get(interaction.guild.roles, name="groupe: B"):
+                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="groupe: A"))
+            await interaction.user.add_roles(self.role)
+        await interaction.response.edit_message(view=self.view)
+        
+        
+@bot.tree.command(name="reactionrole", description="Create a message with a reaction role")
+@app_commands.checks.has_permissions(manage_roles=True)
+async def reactionrole(interaction: discord.Interaction, title: str, message: str, roles: str, channel_name: str):
+    channel = discord.utils.get(interaction.guild.channels, name=channel_name)
+    if channel is None:
+        await interaction.response.send_message("Le channel n'existe pas", ephemeral=True)
+        return
+    if len(roles.split(",")) > 5:
+        await interaction.response.send_message("Il y a trop de rôles", ephemeral=True)
+        return
+    role_list = []
+    for role in roles.split(","):
+        role_list.append(discord.utils.get(interaction.guild.roles, name=role))
+    view = discord.ui.View()
+    for i in range(len(role_list)):
+        if role_list[i].name == "Gaming":
+            view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.secondary, emoji="🎮", custom_id=role_list[i].name))
+        elif role_list[i].name == "groupe: A":
+            view.add_item(RoleButton(role_list[i], label="Group A", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        elif role_list[i].name == "groupe: B":
+            view.add_item(RoleButton(role_list[i], label="Group B", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        else:
+            view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+    embed = discord.Embed(title=title, description=message, color=0x351DE7)
+    await channel.send(embed=embed, view=view)
+    await interaction.response.send_message("Le message a bien été envoyé", ephemeral=True)
+
+bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GfofCj.3zfdtKRie6RbmhFCi1F465OqrE5Id4TfkllOXA')
