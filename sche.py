@@ -99,4 +99,4 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
     
     
     
-bot.run('MTAyMDA0NzI1OTE1NDUzNDU2Mg.GBskVl.KhrFQaGnSQTiS4clk6fDb2lPh0TnyWpuqyH_F0')
+bot.run('Token')
