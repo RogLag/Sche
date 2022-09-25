@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-version = "1.2.0"
+version = "1.2.1"
 
 @bot.event
 async def on_ready():
@@ -143,8 +143,23 @@ async def reactionrole(interaction: discord.Interaction, title: str, message: st
             view.add_item(RoleButton(role_list[i], label="Group B", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
         else:
             view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.success, custom_id=role_list[i].name))
-    embed = discord.Embed(title=title, description=message, color=0x351DE7)
+    """
+    Mettre des saut de ligne dans le embed
+    """
+    print(message.split("\\n"))
+    for i in range(0,len(message.split("\\n"))):
+        if i == 0:
+            embed = discord.Embed(title=title, description=message.split("\\n")[i], color=0x351DE7)
+        else:
+            if message.split("\\n")[i] == message.split("\\n")[0]:
+                embed.add_field(name=message.split("\\n")[0],value=message.split("\\n")[1], inline=False)
+            elif message.split("\\n")[i] == message.split("\\n")[1]:
+                pass
+            elif message.split("\\n")[i] != "":
+                embed.add_field(name="\u200b",value=message.split("\\n")[i], inline=False)
+            else:
+                embed.add_field(name="\u200b",value="\u200b", inline=False)
     await channel.send(embed=embed, view=view)
     await interaction.response.send_message("Le message a bien été envoyé", ephemeral=True)
 
-bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GfofCj.3zfdtKRie6RbmhFCi1F465OqrE5Id4TfkllOXA')
+bot.run('Token')
