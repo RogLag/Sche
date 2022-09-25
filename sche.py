@@ -109,13 +109,13 @@ class RoleButton(discord.ui.Button):
         
     async def callback(self, interaction: discord.Interaction):
         if self.role in interaction.user.roles:
-            if self.role != discord.utils.get(interaction.guild.roles, name="groupe: A") and self.role != discord.utils.get(interaction.guild.roles, name="groupe: B"):
+            if self.role != discord.utils.get(interaction.guild.roles, name="Groupe: A") and self.role != discord.utils.get(interaction.guild.roles, name="Groupe: B"):
                 await interaction.user.remove_roles(self.role)
         else:
-            if self.role == discord.utils.get(interaction.guild.roles, name="groupe: A"):
-                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="groupe: B"))
-            if self.role == discord.utils.get(interaction.guild.roles, name="groupe: B"):
-                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="groupe: A"))
+            if self.role == discord.utils.get(interaction.guild.roles, name="Groupe: A"):
+                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="Groupe: B"))
+            if self.role == discord.utils.get(interaction.guild.roles, name="Groupe: B"):
+                await interaction.user.remove_roles(discord.utils.get(interaction.guild.roles, name="Groupe: A"))
             await interaction.user.add_roles(self.role)
         await interaction.response.edit_message(view=self.view)
         
@@ -137,10 +137,10 @@ async def reactionrole(interaction: discord.Interaction, title: str, message: st
     for i in range(len(role_list)):
         if role_list[i].name == "Gaming":
             view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.secondary, emoji="🎮", custom_id=role_list[i].name))
-        elif role_list[i].name == "groupe: A":
-            view.add_item(RoleButton(role_list[i], label="Group A", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
-        elif role_list[i].name == "groupe: B":
-            view.add_item(RoleButton(role_list[i], label="Group B", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        elif role_list[i].name == "Groupe: A":
+            view.add_item(RoleButton(role_list[i], label="Groupe A", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        elif role_list[i].name == "Groupe: B":
+            view.add_item(RoleButton(role_list[i], label="Groupe B", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
         else:
             view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.success, custom_id=role_list[i].name))
     """
