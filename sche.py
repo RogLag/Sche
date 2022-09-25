@@ -146,7 +146,6 @@ async def reactionrole(interaction: discord.Interaction, title: str, message: st
     """
     Mettre des saut de ligne dans le embed
     """
-    print(message.split("\\n"))
     for i in range(0,len(message.split("\\n"))):
         if i == 0:
             embed = discord.Embed(title=title, description=message.split("\\n")[i], color=0x351DE7)
