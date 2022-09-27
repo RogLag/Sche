@@ -305,4 +305,4 @@ async def help(interaction: discord.Interaction):
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GajnSU.Pls---ZmCIE9dDWVfXSQbYyIGNX5Irqs0Gqrjc')
+bot.run('Token')
