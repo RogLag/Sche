@@ -113,7 +113,7 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
                 english = "6"
             elif i == "Anglais: 7":
                 english = "7"
-    if "S.I.: 1" not in get_name_roles and "S.I.: 2" not in get_name_roles and "S.I.: 3" not in get_name_roles and "S.I.: 4" not in get_name_roles and "S.I.: 5":
+    if "S.I.: 1" not in get_name_roles and "S.I.: 2" not in get_name_roles and "S.I.: 3" not in get_name_roles and "S.I.: 4" not in get_name_roles and "S.I.: 5" not in get_name_roles:
         await interaction.followup.send("Vous n'avez pas de groupe de S.I., merci de le selectionner dans ce channel: <#1019985812269572126> !")
         return
     else:
