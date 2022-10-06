@@ -38,7 +38,7 @@ async def setup(interaction: discord.Interaction, group: str):
     if dateofday.weekday() == 0:
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
     else:
-        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, {group}, "1", "1")
+        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str({group}), "1", "1")
     await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
     await interaction.channel.send(file=discord.File('./calendar.png'))
     print(f"Aujourd'hui on est un {dateofday.weekday()}")
