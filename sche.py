@@ -231,7 +231,7 @@ async def setup_reaction(interaction: discord.Interaction, channel_name: str):
     """Creation du premier reaction role:"""
     roles="Groupe: A,Groupe: B,Gaming"
     title="**__Reaction Role :__**"
-    message="Veuillez sélectionner tout d'abord votre groupe de classe (<@&1022559746722631722> ou <@&1022559875483570387>) !\nline\nDe plus, le rôle <@&1020026863399223347> est disponible et permet d'accéder à différents salons dédiés aux jeux vidéos !\n<@&1019163845413052488>"
+    message="Veuillez sélectionner tout d'abord votre groupe de classe (<@&1022559746722631722> ou <@&1022559875483570387>) !\\nline\\nDe plus, le rôle <@&1020026863399223347> est disponible et permet d'accéder à différents salons dédiés aux jeux vidéos !\\n<@&1019163845413052488>"
     channel = discord.utils.get(interaction.guild.channels, name=channel_name)
     if channel is None:
         await interaction.response.send_message("Le channel n'existe pas", ephemeral=True)
