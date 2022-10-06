@@ -196,6 +196,132 @@ class RoleButtonEnglish(discord.ui.Button):
         await interaction.user.add_roles(self.role)
         await interaction.followup.send(f"Vous avez été ajouté au groupe d'anglais n°{self.role.name[9:]} !", ephemeral=True)
         return
+    
+@bot.tree.command(name="setup_reaction")
+@app_commands.checks.has_permissions(manage_roles=True)
+async def setup_reaction(interaction: discord.Interaction, channel_name: str):
+    await interaction.response.defer()
+    if discord.utils.get(interaction.guild.channels, name=channel_name) is None:
+        await interaction.followup.send("Le channel roles n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Groupe: A") is None:
+        await interaction.followup.send("Le rôle Groupe: A n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Groupe: B") is None:
+        await interaction.followup.send("Le rôle Groupe: B n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 1") is None:
+        await interaction.followup.send("Le rôle Anglais: 1 n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 2") is None:
+        await interaction.followup.send("Le rôle Anglais: 2 n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 3") is None:
+        await interaction.followup.send("Le rôle Anglais: 3 n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 4") is None:
+        await interaction.followup.send("Le rôle Anglais: 4 n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 5") is None:
+        await interaction.followup.send("Le rôle Anglais: 5 n'existe pas.", ephemeral=True)
+        return
+    if discord.utils.get(interaction.guild.roles, name="Anglais: 6") is None:
+        await interaction.followup.send("Le rôle Anglais: 6 n'existe pas.", ephemeral=True)
+        return
+    """Creation du premier reaction role:"""
+    roles="Groupe: A,Groupe: B,Gaming"
+    title="**__Reaction Role :__**"
+    message="Veuillez sélectionner tout d'abord votre groupe de classe (<@&1022559746722631722> ou <@&1022559875483570387>) !\nline\nDe plus, le rôle <@&1020026863399223347> est disponible et permet d'accéder à différents salons dédiés aux jeux vidéos !\n<@&1019163845413052488>"
+    channel = discord.utils.get(interaction.guild.channels, name=channel_name)
+    if channel is None:
+        await interaction.response.send_message("Le channel n'existe pas", ephemeral=True)
+        return
+    if len(roles.split(",")) > 5:
+        await interaction.response.send_message("Il y a trop de rôles", ephemeral=True)
+        return
+    role_list = []
+    for role in roles.split(","):
+        role_list.append(discord.utils.get(interaction.guild.roles, name=role))
+    view = discord.ui.View(timeout=None)
+    for i in range(len(role_list)):
+        if role_list[i].name == "Gaming" and interaction.guild.name == "PEIP 9":
+            view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.secondary, emoji="🎮", custom_id=role_list[i].name))
+        elif role_list[i].name == "Groupe: A" and interaction.guild.name == "PEIP 9":
+            view.add_item(RoleButton(role_list[i], label="Groupe A", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        elif role_list[i].name == "Groupe: B" and interaction.guild.name == "PEIP 9":
+            view.add_item(RoleButton(role_list[i], label="Groupe B", style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+        else:
+            view.add_item(RoleButton(role_list[i], label=role_list[i].name, style=discord.ButtonStyle.success, custom_id=role_list[i].name))
+    for i in range(0,len(message.split("\\n"))):
+        if i == 0:
+            embed = discord.Embed(title=title, description=message.split("\\n")[i], color=0x351DE7)
+        else:
+            if message.split("\\n")[i] == message.split("\\n")[0]:
+                embed.add_field(name=message.split("\\n")[0],value=message.split("\\n")[1], inline=False)
+            elif message.split("\\n")[i] == message.split("\\n")[1]:
+                pass
+            elif message.split("\\n")[i] != "":
+                embed.add_field(name="\u200b",value=message.split("\\n")[i], inline=False)
+            else:
+                embed.add_field(name="\u200b",value="\u200b", inline=False)
+    await channel.send(embed=embed, view=view)
+    """Creation du deuxieme reaction role:"""
+    title="**__Reaction Role :__**"
+    message="Veuillez, ensuite, selectionner votre groupe de S.I. !"
+    groupes = [1, 2, 3, 4, 5]
+    liste_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
+    channel = discord.utils.get(interaction.guild.channels, name=channel_name)
+    if channel is None:
+        await interaction.response.send_message("Le channel n'existe pas", ephemeral=True)
+        return
+    view = discord.ui.View(timeout=None)
+    roles_groupes = []
+    for i in range(len(groupes)):
+        roles_groupes.append(discord.utils.get(interaction.guild.roles, name=f"S.I.: {groupes[i]}"))
+    for i in range(len(roles_groupes)):
+            view.add_item(RoleButtonSI(roles_groupes[i], emoji=liste_emoji[i], style=discord.ButtonStyle.secondary, custom_id=roles_groupes[i].name))
+    for i in range(0,len(message.split("\\n"))):
+        if i == 0:
+            embed = discord.Embed(title=title, description=message.split("\\n")[i], color=0x351DE7)
+        else:
+            if message.split("\\n")[i] == message.split("\\n")[0]:
+                embed.add_field(name=message.split("\\n")[0],value=message.split("\\n")[1], inline=False)
+            elif message.split("\\n")[i] == message.split("\\n")[1]:
+                pass
+            elif message.split("\\n")[i] != "":
+                embed.add_field(name="\u200b",value=message.split("\\n")[i], inline=False)
+            else:
+                embed.add_field(name="\u200b",value="\u200b", inline=False)
+    await channel.send(embed=embed, view=view)
+    """Creation du troisieme reaction role:"""
+    title="**__Reaction Role :__**"
+    message="Enfin, selectionner votre groupe d'anglais !"
+    groupes = [1, 2, 3, 4, 5, 6, 7]
+    liste_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"]
+    channel = discord.utils.get(interaction.guild.channels, name=channel_name)
+    if channel is None:
+        await interaction.response.send_message("Le channel n'existe pas", ephemeral=True)
+        return
+    view = discord.ui.View(timeout=None)
+    roles_groupes = []
+    for i in range(len(groupes)):
+        roles_groupes.append(discord.utils.get(interaction.guild.roles, name=f"Anglais: {groupes[i]}"))
+    for i in range(len(roles_groupes)):
+            view.add_item(RoleButtonEnglish(roles_groupes[i], emoji=liste_emoji[i], style=discord.ButtonStyle.secondary, custom_id=roles_groupes[i].name))
+    for i in range(0,len(message.split("\\n"))):
+        if i == 0:
+            embed = discord.Embed(title=title, description=message.split("\\n")[i], color=0x351DE7)
+        else:
+            if message.split("\\n")[i] == message.split("\\n")[0]:
+                embed.add_field(name=message.split("\\n")[0],value=message.split("\\n")[1], inline=False)
+            elif message.split("\\n")[i] == message.split("\\n")[1]:
+                pass
+            elif message.split("\\n")[i] != "":
+                embed.add_field(name="\u200b",value=message.split("\\n")[i], inline=False)
+            else:
+                embed.add_field(name="\u200b",value="\u200b", inline=False)
+    await channel.send(embed=embed, view=view)
+    await interaction.followup.send("Les réactions-roles ont été setup !")
         
 @bot.tree.command(name="reactionrole", description="Create a message with a reaction role")
 @app_commands.checks.has_permissions(manage_roles=True)
@@ -267,7 +393,7 @@ async def reactionenglishgroup(interaction: discord.Interaction, title: str, mes
 
 @bot.tree.command(name="reactionsigroup", description="Create a message with a reaction role")
 @app_commands.checks.has_permissions(manage_roles=True)
-async def reactionenglishgroup(interaction: discord.Interaction, title: str, message: str, channel_name: str):
+async def reactionsigroup(interaction: discord.Interaction, title: str, message: str, channel_name: str):
     groupes = [1, 2, 3, 4, 5]
     liste_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
     channel = discord.utils.get(interaction.guild.channels, name=channel_name)
