@@ -17,19 +17,31 @@ def get_wrapped_text(text: str, font: ImageFont.ImageFont, line_length: int):
         return '\n'.join(lines)
 
 def updateTimetable():
-    calendarFile = open('./ADECal.ics', 'w', encoding='utf-8', newline='\n')
+    calendarFile = open('./ADECalA.ics', 'w', encoding='utf-8', newline='\n')
 
-    res = requests.get('http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=ff69e94cc5e79fb161a9f2c47b250b59b4656713ae4720315366f1bfdaa16957a56b9d48cf60d89aad5fb9b261bdf14bc23fc73e40a62f8cea315d7ede6c0137,1')
+    res = requests.get('http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=af235c48b98dffe83858948ea9f61e62b4656713ae4720315366f1bfdaa16957a56b9d48cf60d89aad5fb9b261bdf14bc23fc73e40a62f8cea315d7ede6c0137,1')
+    for line in res.text:
+        calendarFile.writelines(line)
+    calendarFile.close()
+
+    calendarFile = open('./ADECalB.ics', 'w', encoding='utf-8', newline='\n')
+
+    res = requests.get('http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=d10d2eee7adfcc1a372dc75a5b67ef22c7b1b8fd4893743159bad83977cb3718a56b9d48cf60d89aad5fb9b261bdf14bc23fc73e40a62f8cea315d7ede6c0137,1')
     for line in res.text:
         calendarFile.writelines(line)
     calendarFile.close()
 
 def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
-    cal = Calendar.from_ical(open('ADECal.ics', 'rb').read())
+    cal = Calendar.from_ical(open('ADECalA.ics', 'rb').read())
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
     draw = ImageDraw.Draw(image)
     fnt = ImageFont.truetype("./ayar.ttf", 30, encoding="unic")
+
+    if(classGroup == "A"):
+        cal = Calendar.from_ical(open('ADECalA.ics', 'rb').read())
+    elif(classGroup == "B"):
+        cal = Calendar.from_ical(open('ADECalB.ics', 'rb').read())
 
     for component in cal.walk():
         if component.name == "VEVENT":
@@ -65,9 +77,6 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
 
                     draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+2)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+2)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
-                else:
-                    if('9'+classGroup.upper() not in component.get('summary') and 'Gr9 ' not in component.get('summary') and 'Gr 9' not in component.get('summary') and 'CM' not in component.get('summary') and 'Gr9'+classGroup.upper() not in component.get('summary')):
-                        continue
 
                     color = (100,100,100,255)
                     if('Raisonnement' in component.get('summary')):

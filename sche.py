@@ -488,4 +488,61 @@ async def today(interaction: discord.Interaction):
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
+@bot.tree.command(name="tomorrow", description="Affiche l'emploi du temps du lendemain")
+async def tomorrow(interaction: discord.Interaction):
+    date = datetime.datetime.now() + datetime.timedelta(days=1)
+    await interaction.response.defer(ephemeral=True)
+    get_role = interaction.user.roles
+    get_name_roles = []
+    for i in get_role:
+        get_name_roles.append(i.name)
+    if "Groupe: A" not in get_name_roles and "Groupe: B" not in get_name_roles:
+        await interaction.followup.send("Vous n'avez pas de groupe de classe, merci de le selectionner dans ce channel: <#1019985812269572126> !")
+        return
+    else:
+        for i in get_name_roles:
+            if i == "Groupe: A":
+                group = "A"
+            elif i == "Groupe: B":
+                group = "B"
+    if "Anglais: 1" not in get_name_roles and "Anglais: 2" not in get_name_roles and "Anglais: 3" not in get_name_roles and "Anglais: 4" not in get_name_roles and "Anglais: 5" not in get_name_roles and "Anglais: 6" not in get_name_roles and "Anglais: 7" not in get_name_roles:
+        await interaction.followup.send("Vous n'avez pas de groupe d'anglais, merci de le selectionner dans ce channel: <#1019985812269572126> !")
+        return
+    else:
+        for i in get_name_roles:
+            if i == "Anglais: 1":
+                english = "1"
+            elif i == "Anglais: 2":
+                english = "2"
+            elif i == "Anglais: 3":
+                english = "3"
+            elif i == "Anglais: 4":
+                english = "4"
+            elif i == "Anglais: 5":
+                english = "5"
+            elif i == "Anglais: 6":
+                english = "6"
+            elif i == "Anglais: 7":
+                english = "7"
+    if "S.I.: 1" not in get_name_roles and "S.I.: 2" not in get_name_roles and "S.I.: 3" not in get_name_roles and "S.I.: 4" not in get_name_roles and "S.I.: 5" not in get_name_roles:
+        await interaction.followup.send("Vous n'avez pas de groupe de S.I., merci de le selectionner dans ce channel: <#1019985812269572126> !")
+        return
+    else:
+        for i in get_name_roles:
+            if i == "S.I.: 1":
+                si = "1"
+            elif i == "S.I.: 2":
+                si = "2"
+            elif i == "S.I.: 3":
+                si = "3"
+            elif i == "S.I.: 4":
+                si = "4"
+            elif i == "S.I.: 5":
+                si = "5"
+    try:
+        ics_reader.getTimetable(int(date.year), int(date.month), int(date.day), group, english, si)
+        await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, SI {si} :",file=discord.File('./calendar.png'), ephemeral=True)
+    except Exception as e:
+        await interaction.followup.send("Erreur: " + str(e))
+
 bot.run('Token')
