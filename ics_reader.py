@@ -77,7 +77,8 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
 
                     draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+2)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+2)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
-
+                else:
+                    
                     color = (100,100,100,255)
                     if('Raisonnement' in component.get('summary')):
                         color = (50,50,255,255)
