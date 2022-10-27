@@ -87,7 +87,7 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
                         color = (255,128,128,255)
                     elif('Mécanique' in component.get('summary')):
                         color = (255,0,128,255)
-                    elif('Informatique'):
+                    elif('Informatique' in component.get('summary')):
                         color = (0,128,64,255)
                     
 
