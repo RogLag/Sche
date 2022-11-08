@@ -32,6 +32,7 @@ def updateTimetable():
     calendarFile.close()
 
 def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
+    hour_delta = -7
     cal = Calendar.from_ical(open('ADECalA.ics', 'rb').read())
     today = datetime.datetime(year, month, day)
     image = Image.new(mode='RGBA',size=(700, 1660),color=(22,22,22,255))
@@ -61,21 +62,21 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
                         continue
 
 
-                    draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
+                    draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
 
                     if(len(component.get('summary')) > 35):
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
                     
                     if(len(component.get('location')) > 35):
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
                     
-                    draw.text((70, 150+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('description').split('\n')[-3],font=fnt,fill=(255,255,255,255))
+                    draw.text((70, 150+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('description').split('\n')[-3],font=fnt,fill=(255,255,255,255))
 
-                    draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+2)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+2)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
+                    draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+1)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+1)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
                 else:
                     
@@ -92,21 +93,21 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
                         color = (0,128,64,255)
                     
 
-                    draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
+                    draw.rectangle((50, 50+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15), 650, 50+138*(component.get('dtend').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtend').dt.timetuple().tm_min//15)), fill=color)
 
                     if(len(component.get('summary')) > 35):
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
-                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 70+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('summary'),font=fnt,fill=(255,255,255,255))
                     
                     if(len(component.get('location')) > 35):
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location')[:35]+'...',font=fnt,fill=(255,255,255,255))
                     else:
-                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
+                        draw.text((70, 110+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('location'),font=fnt,fill=(255,255,255,255))
                     
-                    draw.text((70, 150+138*(component.get('dtstart').dt.timetuple().tm_hour-6)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('description').split('\n')[-3],font=fnt,fill=(255,255,255,255))
+                    draw.text((70, 150+138*(component.get('dtstart').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtstart').dt.timetuple().tm_min//15)),component.get('description').split('\n')[-3],font=fnt,fill=(255,255,255,255))
 
-                    draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour-6)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+2)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+2)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
+                    draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+1)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+1)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
     image.save('./calendar.png')
 

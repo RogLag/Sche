@@ -545,4 +545,4 @@ async def tomorrow(interaction: discord.Interaction):
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
-bot.run('Token')
+bot.run('token')
