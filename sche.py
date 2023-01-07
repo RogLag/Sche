@@ -43,15 +43,15 @@ async def setup(interaction: discord.Interaction, group: str):
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
     await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
     await interaction.channel.send(file=discord.File('./calendar.png'))
-    print(f"Aujourd'hui on est un {dateofday.weekday()}")
+    print(f"Aujourd'hui on est le {dateofday.day}/{dateofday.month}/{dateofday.year}")
     while True:
         dateofday = datetime.datetime.now()
         if dateofday.hour == 00 and dateofday.minute >= 5 and dateofday.minute <= 10:
             if dateofday.weekday() != 5 and dateofday.weekday() != 6:
                 if dateofday.weekday() == 0:
-                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0")
                 else:
-                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group))
                 await interaction.channel.purge(limit=2)
                 await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
                 await interaction.channel.send(file=discord.File('./calendar.png'))
@@ -480,4 +480,4 @@ async def tomorrow(interaction: discord.Interaction):
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
-bot.run('token')
+bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GO1EOc.7HQgkrg9ff6q6WwqkD_M51UMwT1wYuBr3ZnDGo')
