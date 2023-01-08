@@ -488,7 +488,7 @@ async def delestage_setup(interaction: discord.Interaction):
     await interaction.response.send_message("Setup the bot for 'delestage', every day.", ephemeral=True)
     while True:
         dateofday = datetime.datetime.now()
-        if dateofday.hour == 20 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 4 and dateofday.weekday() != 5:
+        if dateofday.hour == 19 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 4 and dateofday.weekday() != 5:
             list_open_or_not = delestage.openornot()
             await interaction.channel.purge(limit=len(list_open_or_not)+1)
             await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
@@ -501,7 +501,7 @@ async def delestage_setup(interaction: discord.Interaction):
             print(f"Prochain message dans 11h.")
             await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 11h.")
             await asyncio.sleep(60*60*11)
-        elif dateofday.hour == 7 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 5 and dateofday.weekday() != 6:
+        elif dateofday.hour == 6 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 5 and dateofday.weekday() != 6:
             list_open_or_not = delestage.openornot()
             await interaction.channel.purge(limit=len(list_open_or_not)+1)
             await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
@@ -515,7 +515,7 @@ async def delestage_setup(interaction: discord.Interaction):
             await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 13h.")
             await asyncio.sleep(60*60*13)
         else:
-            time_sleep = 60*60*(20-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
+            time_sleep = 60*60*(19-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
             print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
             await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
             await asyncio.sleep(time_sleep)
