@@ -7,6 +7,7 @@ from discord.app_commands import Choice
 import datetime
 import asyncio
 import ics_reader
+import delestage
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -480,4 +481,45 @@ async def tomorrow(interaction: discord.Interaction):
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
-bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GO1EOc.7HQgkrg9ff6q6WwqkD_M51UMwT1wYuBr3ZnDGo')
+@bot.tree.command(name="delestage_setup", description="Affiche tous les jours à 19h et à 7h si les batiments seront ouverts ou non")
+async def delestage_setup(interaction: discord.Interaction):
+    dateofday = datetime.datetime.now()
+    await interaction.response.send_message("Setup the bot for delestage, every day.", ephemeral=True)
+    while True:
+        dateofday = datetime.datetime.now()
+        if dateofday.hour == 20 and dateofday.minute >= 1 and dateofday.minute <= 5:
+            list_open_or_not = delestage.openornot()
+            await interaction.channel.purge(limit=len(list_open_or_not)+1)
+            await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
+            for i in list_open_or_not:
+                if "ouvert" in i:
+                    await interaction.channel.send(i+"      :white_check_mark:")
+                else:
+                    await interaction.channel.send(i+"      :x:")
+            print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
+            print(f"Prochain message dans 11h.")
+            await asyncio.sleep(60*60*11)
+        elif dateofday.hour == 7 and dateofday.minute >= 1 and dateofday.minute <= 5:
+            list_open_or_not = delestage.openornot()
+            await interaction.channel.purge(limit=len(list_open_or_not)+1)
+            await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
+            for i in list_open_or_not:
+                if "ouvert" in i:
+                    await interaction.channel.send(i+"      :white_check_mark:")
+                else:
+                    await interaction.channel.send(i+"      :x:")
+            print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
+            print(f"Prochain message dans 13h.")
+            await asyncio.sleep(60*60*13)
+        else:
+            time_sleep = 60*60*(20-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
+            if time_sleep < 0:
+                time_sleep = time_sleep * -1
+            print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
+            await asyncio.sleep(time_sleep)
+    
+    
+    
+    
+    
+bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GZII59.dM78oBJllIxq3Ka9Z5eeBnZn7-Q-xIXOa3SOGk')
