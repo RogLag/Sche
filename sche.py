@@ -516,15 +516,13 @@ async def delestage_setup(interaction: discord.Interaction):
             await asyncio.sleep(60*60*13)
         else:
             time_sleep = 60*60*(20-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
-            if time_sleep < 0:
-                time_sleep = time_sleep * -1
             print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
             await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
             await asyncio.sleep(time_sleep)
-            
-    
-    
-    
-    
-    
+
+
+
+
+
+
 bot.run('Token')
