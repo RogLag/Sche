@@ -21,7 +21,7 @@ async def on_ready():
     now = datetime.datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     channel_connected = bot.get_channel(972811106580058132)
-    embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0x33DAFF)
+    embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0xdf0000)
     await channel_connected.send(embed=embed)
     print(f"{bot.user.name} is ready.")  
     synced = await bot.tree.sync()
@@ -484,10 +484,11 @@ async def tomorrow(interaction: discord.Interaction):
 @bot.tree.command(name="delestage_setup", description="Affiche tous les jours à 19h et à 7h si les batiments seront ouverts ou non")
 async def delestage_setup(interaction: discord.Interaction):
     dateofday = datetime.datetime.now()
-    await interaction.response.send_message("Setup the bot for delestage, every day.", ephemeral=True)
+    channel_connected = bot.get_channel(1061688892429967461)
+    await interaction.response.send_message("Setup the bot for 'delestage', every day.", ephemeral=True)
     while True:
         dateofday = datetime.datetime.now()
-        if dateofday.hour == 20 and dateofday.minute >= 1 and dateofday.minute <= 5:
+        if dateofday.hour == 20 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 4 and dateofday.weekday() != 5:
             list_open_or_not = delestage.openornot()
             await interaction.channel.purge(limit=len(list_open_or_not)+1)
             await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
@@ -498,8 +499,9 @@ async def delestage_setup(interaction: discord.Interaction):
                     await interaction.channel.send(i+"      :x:")
             print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             print(f"Prochain message dans 11h.")
+            await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 11h.")
             await asyncio.sleep(60*60*11)
-        elif dateofday.hour == 7 and dateofday.minute >= 1 and dateofday.minute <= 5:
+        elif dateofday.hour == 7 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 5 and dateofday.weekday() != 6:
             list_open_or_not = delestage.openornot()
             await interaction.channel.purge(limit=len(list_open_or_not)+1)
             await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
@@ -510,16 +512,19 @@ async def delestage_setup(interaction: discord.Interaction):
                     await interaction.channel.send(i+"      :x:")
             print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             print(f"Prochain message dans 13h.")
+            await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 13h.")
             await asyncio.sleep(60*60*13)
         else:
             time_sleep = 60*60*(20-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
             if time_sleep < 0:
                 time_sleep = time_sleep * -1
             print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
+            await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
             await asyncio.sleep(time_sleep)
+            
     
     
     
     
     
-bot.run('MTAyMzI2OTMzMzY2Njg4OTc5OA.GZII59.dM78oBJllIxq3Ka9Z5eeBnZn7-Q-xIXOa3SOGk')
+bot.run('Token')
