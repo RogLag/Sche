@@ -42,7 +42,7 @@ async def setup(interaction: discord.Interaction, group: str):
     else:
         ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
     await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
-    await interaction.channel.send(file=discord.File('./calendar.png'))
+    await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
     print(f"Aujourd'hui on est un {dateofday.weekday()}")
     while True:
         dateofday = datetime.datetime.now()
@@ -54,7 +54,7 @@ async def setup(interaction: discord.Interaction, group: str):
                     ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
                 await interaction.channel.purge(limit=2)
                 await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
-                await interaction.channel.send(file=discord.File('./calendar.png'))
+                await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
                 print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             await asyncio.sleep(60*60*24)
         else:
@@ -145,7 +145,7 @@ async def timetable(interaction: discord.Interaction, day: str, month: str, year
             return
     try:
         ics_reader.getTimetable(int(year), int(month), int(day), group, english, si)
-        await interaction.followup.send(f"Emploi du temps du {day}/{month}/{year}, groupe {group}, anglais {english}, SI {si} :",file=discord.File('./calendar.png'), ephemeral=True)
+        await interaction.followup.send(f"Emploi du temps du {day}/{month}/{year}, groupe {group}, anglais {english}, SI {si} :",file=discord.File(f'./calendar{group}.png'), ephemeral=True)
     except ValueError:
         await interaction.followup.send("Wrong date", ephemeral=True)
     print(f"Message envoyée dans le channel {interaction.channel.name} à l'utilisateur {interaction.user.name} sur le serveur {interaction.guild.name} le {datetime.datetime.now()}")
@@ -417,7 +417,7 @@ async def today(interaction: discord.Interaction):
                 si = "DMS"
     try:
         ics_reader.getTimetable(int(date.year), int(date.month), int(date.day), group, english, si)
-        await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, projet {si} :",file=discord.File('./calendar.png'), ephemeral=True)
+        await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, projet {si} :",file=discord.File(f'./calendar{group}.png'), ephemeral=True)
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
@@ -476,8 +476,8 @@ async def tomorrow(interaction: discord.Interaction):
                 si = "DMS"
     try:
         ics_reader.getTimetable(int(date.year), int(date.month), int(date.day), group, english, si)
-        await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, projet {si} :",file=discord.File('./calendar.png'), ephemeral=True)
+        await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, projet {si} :",file=discord.File(f'./calendar{group}.png'), ephemeral=True)
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
 
-bot.run('token')
+bot.run('Token')

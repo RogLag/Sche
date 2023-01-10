@@ -120,7 +120,7 @@ def getTimetable(year, month, day, classGroup, englishGroup=1, siGroup=1):
 
                     draw.text((70, 50+138*(component.get('dtend').dt.timetuple().tm_hour+hour_delta)+35*(component.get('dtend').dt.timetuple().tm_min//15)-40),str(component.get('dtstart').dt.timetuple().tm_hour+1)+':'+str(component.get('dtstart').dt.timetuple().tm_min)+' - '+str(component.get('dtend').dt.timetuple().tm_hour+1)+':'+str(component.get('dtend').dt.timetuple().tm_min),font=fnt,fill=(255,255,255,255))
 
-    image.save('./calendar.png')
+    image.save(f'./calendar{classGroup}.png')
 
 if __name__ == "__main__":
     while True:
