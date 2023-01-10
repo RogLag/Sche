@@ -7,6 +7,7 @@ from discord.app_commands import Choice
 import datetime
 import asyncio
 import ics_reader
+import delestage
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -20,7 +21,7 @@ async def on_ready():
     now = datetime.datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     channel_connected = bot.get_channel(972811106580058132)
-    embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0x33DAFF)
+    embed=discord.Embed(title=f"{bot.user.name} is ready !", description=f"Up date: {dt_string},\n\nVersion: {version},\n{bot.user.name} by Rog#8698.", color=0xdf0000)
     await channel_connected.send(embed=embed)
     print(f"{bot.user.name} is ready.")  
     synced = await bot.tree.sync()
@@ -44,14 +45,15 @@ async def setup(interaction: discord.Interaction, group: str):
     await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
     await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
     print(f"Aujourd'hui on est un {dateofday.weekday()}")
+
     while True:
         dateofday = datetime.datetime.now()
         if dateofday.hour == 00 and dateofday.minute >= 5 and dateofday.minute <= 10:
             if dateofday.weekday() != 5 and dateofday.weekday() != 6:
                 if dateofday.weekday() == 0:
-                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0")
                 else:
-                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
+                    ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group))
                 await interaction.channel.purge(limit=2)
                 await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
                 await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
@@ -479,5 +481,44 @@ async def tomorrow(interaction: discord.Interaction):
         await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, projet {si} :",file=discord.File(f'./calendar{group}.png'), ephemeral=True)
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
+
+@bot.tree.command(name="delestage_setup", description="Affiche tous les jours à 19h et à 7h si les batiments seront ouverts ou non")
+async def delestage_setup(interaction: discord.Interaction):
+    dateofday = datetime.datetime.now()
+    channel_connected = bot.get_channel(1061688892429967461)
+    await interaction.response.send_message("Setup the bot for 'delestage', every day.", ephemeral=True)
+    while True:
+        dateofday = datetime.datetime.now()
+        if dateofday.hour == 19 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 4 and dateofday.weekday() != 5:
+            list_open_or_not = delestage.openornot()
+            await interaction.channel.purge(limit=len(list_open_or_not)+1)
+            await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
+            for i in list_open_or_not:
+                if "ouvert" in i:
+                    await interaction.channel.send(i+"      :white_check_mark:")
+                else:
+                    await interaction.channel.send(i+"      :x:")
+            print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
+            print(f"Prochain message dans 11h.")
+            await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 11h.")
+            await asyncio.sleep(60*60*11)
+        elif dateofday.hour == 6 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 5 and dateofday.weekday() != 6:
+            list_open_or_not = delestage.openornot()
+            await interaction.channel.purge(limit=len(list_open_or_not)+1)
+            await interaction.channel.send("Mes informations proviennent du site : https://www.univ-tours.fr/delestage-1, je les mets à jour à 7h et à 20h tous les jours sauf le week-end. Merci de vérifier sur le site par vous même.")
+            for i in list_open_or_not:
+                if "ouvert" in i:
+                    await interaction.channel.send(i+"      :white_check_mark:")
+                else:
+                    await interaction.channel.send(i+"      :x:")
+            print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
+            print(f"Prochain message dans 13h.")
+            await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 13h.")
+            await asyncio.sleep(60*60*13)
+        else:
+            time_sleep = 60*60*(19-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
+            print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
+            await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
+            await asyncio.sleep(time_sleep)
 
 bot.run('Token')
