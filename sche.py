@@ -487,6 +487,10 @@ async def delestage_setup(interaction: discord.Interaction):
     dateofday = datetime.datetime.now()
     channel_connected = bot.get_channel(1061688892429967461)
     await interaction.response.send_message("Setup the bot for 'delestage', every day.", ephemeral=True)
+    time_sleep = 60*60*(19-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
+    print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
+    await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
+    await asyncio.sleep(time_sleep)
     while True:
         dateofday = datetime.datetime.now()
         if dateofday.hour == 19 and dateofday.minute >= 1 and dateofday.minute <= 5 and dateofday.weekday() != 4 and dateofday.weekday() != 5:
@@ -515,10 +519,5 @@ async def delestage_setup(interaction: discord.Interaction):
             print(f"Prochain message dans 13h.")
             await channel_connected.send(f"Delestage: Le prochain message sera envoyé dans 13h.")
             await asyncio.sleep(60*60*13)
-        else:
-            time_sleep = 60*60*(19-dateofday.hour)+60*(1-dateofday.minute)+0-dateofday.second
-            print(f"Le premier message sera envoyé dans {time_sleep} secondes.")
-            await channel_connected.send(f"Delestage: Le premier message sera envoyé dans {time_sleep} secondes.")
-            await asyncio.sleep(time_sleep)
 
 bot.run('Token')
