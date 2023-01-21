@@ -39,12 +39,14 @@ async def setup(interaction: discord.Interaction, group: str):
     dateofday = datetime.datetime.now()
     await interaction.response.send_message("Setup the bot for timetable of the day, every day.", ephemeral=True)
     if dateofday.weekday() == 0:
-        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0", "1", "1")
+        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0")
+        await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+        await interaction.channel.send(file=discord.File(f'./calendar0.png'))
     else:
-        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group), "1", "1")
-    await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
-    await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
-    print(f"Aujourd'hui on est un {dateofday.weekday()}")
+        ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group))
+        await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+        await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
+    #print(f"Aujourd'hui on est un {dateofday.weekday()}")
 
     while True:
         dateofday = datetime.datetime.now()
@@ -52,11 +54,14 @@ async def setup(interaction: discord.Interaction, group: str):
             if dateofday.weekday() != 5 and dateofday.weekday() != 6:
                 if dateofday.weekday() == 0:
                     ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, "0")
+                    await interaction.channel.purge(limit=2)
+                    await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+                    await interaction.channel.send(file=discord.File(f'./calendar0.png'))
                 else:
                     ics_reader.getTimetable(dateofday.year, dateofday.month, dateofday.day, str(group))
-                await interaction.channel.purge(limit=2)
-                await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
-                await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
+                    await interaction.channel.purge(limit=2)
+                    await interaction.channel.send(f"Emploi du temps du {dateofday.day}/{dateofday.month}/{dateofday.year} pour le groupe {group} :")
+                    await interaction.channel.send(file=discord.File(f'./calendar{group}.png'))
                 print(f"Message bien envoyé à {interaction.channel.name} le {dateofday.day}/{dateofday.month}/{dateofday.year} à {dateofday.hour}:{dateofday.minute}:{dateofday.second}")
             await asyncio.sleep(60*60*24)
         else:
