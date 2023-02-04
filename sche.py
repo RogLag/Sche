@@ -1,5 +1,3 @@
-from distutils.log import error
-from types import coroutine
 import discord
 from discord.ext import commands
 from discord import app_commands
