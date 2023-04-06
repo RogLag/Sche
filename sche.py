@@ -5,12 +5,13 @@ from discord.app_commands import Choice
 import datetime
 import asyncio
 import ics_reader
+from pychatgpt import ChatGPT
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-version = "2.0"
+version = "3.0"
 
 @bot.event
 async def on_ready():
@@ -542,5 +543,19 @@ async def tomorrow(interaction: discord.Interaction):
         await interaction.followup.send(f"Emploi du temps du {str(date.day)}/{str(date.month)}/{str(date.year)}, groupe {group}, anglais {english}, SI {si} :",file=discord.File('./calendar.png'), ephemeral=True)
     except Exception as e:
         await interaction.followup.send("Erreur: " + str(e))
+
+@bot.tree.command(name="chatgpt", description="Permet de parler avec le chat GPT-3")
+async def chatgpt(interaction: discord.Interaction, message: str):
+    await interaction.response.defer(ephemeral=True)
+    try:
+        token = open("token.txt", "r").read()
+        api = ChatGPT(token)
+        response = api.send_message(message)
+        api.clear_conversations()
+        api.__del__()
+        del api
+        await interaction.followup.send(response['message'])
+    except Exception as e:
+        await interaction.followup.send("Une erreur est survenue, merci de conctater Rog#3948 ou Proxyfil🦄#0001 si le problème persiste !")
 
 bot.run('Token')
